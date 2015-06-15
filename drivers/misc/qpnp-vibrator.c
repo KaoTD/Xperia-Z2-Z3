@@ -420,7 +420,6 @@ static int __devinit qpnp_vibrator_probe(struct spmi_device *spmi)
 	dev_set_drvdata(&spmi->dev, vib);
 
 	device_create_file(vib->timed_dev.dev, &dev_attr_vtg_level);
-	
 	vib_dev = vib;
 
 	return rc;
