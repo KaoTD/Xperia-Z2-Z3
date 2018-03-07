@@ -130,16 +130,6 @@ static struct dbs_tuners {
 	.freq_for_responsiveness = FREQ_FOR_RESPONSIVENESS,
 };
 
-static inline u64 get_cpu_iowait_time(unsigned int cpu, u64 *wall)
-{
-	u64 iowait_time = get_cpu_iowait_time_us(cpu, wall);
-
-	if (iowait_time == -1ULL)
-		return 0;
-
-	return iowait_time;
-}
-
 /************************** sysfs interface ************************/
 
 static ssize_t show_sampling_rate_min(struct kobject *kobj,
@@ -552,7 +542,7 @@ static inline void dbs_timer_init(struct cpu_dbs_info_s *dbs_info)
 	if (num_online_cpus() > 1)
 		delay -= jiffies % delay;
 
-	INIT_DEFERRABLE_WORK(&dbs_info->work, do_dbs_timer);
+	INIT_DELAYED_WORK_DEFERRABLE(&dbs_info->work, do_dbs_timer);
 
 	schedule_delayed_work_on(dbs_info->cpu, &dbs_info->work, delay);
 }
